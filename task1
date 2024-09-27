@@ -1,0 +1,93 @@
+
+/*firstly we are writting html code for creating wheather app */
+/*index.html*/
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Weather App</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <input type="text" id="city" placeholder="Enter city name">
+        <button id="getWeather">Get Weather</button>
+        <div id="weatherResult"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+/*styles.css*/
+/*secondly designing the webpage using css styles*/
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+input {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#weatherResult {
+    margin-top: 20px;
+}
+
+
+
+/*script.js*/
+document.getElementById('getWeather').addEventListener('click', async () => {
+    const city = document.getElementById('city').value;
+    const apiKey = 'YOUR_API_KEY'; // Replace with your own API key
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.cod === 200) {
+            const weather = `
+                <h2>Weather in ${data.name}</h2>
+                <p>Temperature: ${data.main.temp} °C</p>
+                <p>Condition: ${data.weather[0].description}</p>
+            `;
+            document.getElementById('weatherResult').innerHTML = weather;
+        } else {
+            document.getElementById('weatherResult').innerHTML = `<p>${data.message}</p>`;
+        }
+    } catch (error) {
+        document.getElementById('weatherResult').innerHTML = `<p>Error fetching weather data.</p>`;
+    }
+});
+
